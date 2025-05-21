@@ -14,21 +14,20 @@ app.use(bodyParser.json());
 app.use('/soportetecnico/api', pcRoutes);
 
 // Verificar conexión y arrancar servidor
-const PORT = process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 10000; // Render usa process.env.PORT
 async function startServer() {
   try {
     await sequelize.authenticate();
     console.log('✅ Conexión a PostgreSQL establecida correctamente.');
     
-    await sequelize.sync(); // Sincroniza modelos con la BD
+    await sequelize.sync();
     
-    app.listen(PORT, () => {
-      console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    app.listen(PORT, '0.0.0.0', () => { // Escucha en todas las interfaces
+      console.log(`Servidor corriendo en el puerto ${PORT}`);
     });
   } catch (error) {
-    console.error('❌ Error de conexión/inicialización:', error);
-    process.exit(1); // Termina el proceso con error
+    console.error('❌ Error de inicio:', error);
+    process.exit(1);
   }
 }
 
