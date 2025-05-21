@@ -1,3 +1,6 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+
 const PcInfo = sequelize.define('PcInfo', {
   nombre: {
     type: DataTypes.STRING(100),
