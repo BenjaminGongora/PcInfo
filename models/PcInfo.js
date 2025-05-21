@@ -1,59 +1,56 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-
 const PcInfo = sequelize.define('PcInfo', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  systemModel: {
-    type: DataTypes.STRING,
+  nombre: {
+    type: DataTypes.STRING(100),
     allowNull: false
   },
-  operatingSystem: {
-    type: DataTypes.STRING,
+  apellido: {
+    type: DataTypes.STRING(100),
     allowNull: false
+  },
+  dni: {
+    type: DataTypes.STRING(20),
+    allowNull: false,
+    unique: true
+  },
+  area: {
+    type: DataTypes.STRING(50),
+    allowNull: false
+  },
+  systemmodel: {  // Nota: todo en minúsculas para coincidir con la BD
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    field: 'systemmodel'  // Explícitamente define el nombre de columna
+  },
+  operatingsystem: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    field: 'operatingsystem'
   },
   cpu: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255),
     allowNull: false
   },
-  totalRAMGB: {
+  totalramgb: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: false,
+    field: 'totalramgb'
   },
   gpus: {
-    type: DataTypes.TEXT,
+    type: DataTypes.JSONB,
     allowNull: false
   },
-  storageDevices: {
-    type: DataTypes.TEXT,
-    allowNull: false
+  storagedevices: {
+    type: DataTypes.JSONB,
+    allowNull: false,
+    field: 'storagedevices'
   },
   timestamp: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATE,
     allowNull: false
-  },
-    nombre: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    apellido: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    dni: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    area: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
+  }
 }, {
   tableName: 'pc_infos',
-  timestamps: false
+  timestamps: true, // created_at y updated_at
+  underscored: false, // Deshabilitado porque ya estamos usando los nombres exactos
+  freezeTableName: true // Evita que Sequelize pluralice el nombre de la tabla
 });
-
-module.exports = PcInfo;
