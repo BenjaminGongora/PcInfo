@@ -13,14 +13,29 @@ app.use(bodyParser.json());
 // Rutas
 app.use('/soportetecnico/api', pcRoutes);
 
-// Sincronizar con la base de datos y arrancar el servidor
+// Verificar conexión y arrancar servidor
 const PORT = process.env.PORT || 3000;
-sequelize.sync()
-  .then(() => {
+
+async function startServer() {
+  try {
+    await sequelize.authenticate();
+    console.log('✅ Conexión a PostgreSQL establecida correctamente.');
+    
+    await sequelize.sync(); // Sincroniza modelos con la BD
+    
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en http://localhost:${PORT}`);
     });
-  })
-  .catch(err => {
-    console.error('No se pudo conectar a la base de datos:', err);
-  });
+  } catch (error) {
+    console.error('❌ Error de conexión/inicialización:', error);
+    process.exit(1); // Termina el proceso con error
+  }
+}
+
+startServer();
+
+// Manejo de cierre elegante
+process.on('SIGINT', async () => {
+  await sequelize.close();
+  process.exit();
+});
