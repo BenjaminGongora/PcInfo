@@ -1,0 +1,20 @@
+{
+  "name": "soporte-api",
+  "version": "1.0.0",
+  "description": "API para recepción de datos de equipos",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mysql2": "^3.6.4",
+    "sequelize": "^6.37.1"
+ },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
