@@ -2,36 +2,34 @@ const PcInfo = require('../models/PcInfo');
 
 // Controlador para recibir datos
 exports.recibirDatosPC = async (req, res) => {
-    try {
-        const { UserInfo, SystemInfo } = req.body;
-        
-        const pcInfo = await PcInfo.create({
-            nombre: UserInfo.Nombre,
-            apellido: UserInfo.Apellido,
-            dni: UserInfo.DNI,
-            area: UserInfo.Area,
-            systemModel: SystemInfo.SystemModel,
-            operatingSystem: SystemInfo.OperatingSystem,
-            cpu: SystemInfo.CPU,
-            totalRAMGB: SystemInfo.TotalRAMGB,
-            gpus: JSON.stringify(SystemInfo.GPUs),
-            storageDevices: JSON.stringify(SystemInfo.StorageDevices),
-            timestamp: SystemInfo.Timestamp
-        });
+  try {
+    const { UserInfo, SystemInfo } = req.body;
+    
+    const pcInfo = await PcInfo.create({
+      nombre: UserInfo.Nombre,
+      apellido: UserInfo.Apellido,
+      dni: UserInfo.DNI,
+      area: UserInfo.Area,
+      systemmodel: SystemInfo.SystemModel, // Ahora en minúsculas
+      operatingsystem: SystemInfo.OperatingSystem,
+      cpu: SystemInfo.CPU,
+      totalramgb: SystemInfo.TotalRAMGB,
+      gpus: SystemInfo.GPUs,
+      storagedevices: SystemInfo.StorageDevices,
+      timestamp: new Date(SystemInfo.Timestamp)
+    });
 
-        res.status(201).json({
-            success: true,
-            data: pcInfo,
-            message: 'Datos guardados correctamente'
-        });
-    } catch (error) {
-        console.error('Error al guardar datos:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error al procesar la solicitud',
-            error: error.message
-        });
-    }
+    res.status(201).json({
+      success: true,
+      data: pcInfo
+    });
+  } catch (error) {
+    console.error('Error al guardar datos:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 };
 
 // Controlador para listar datos
