@@ -57,3 +57,4 @@ const PcInfo = sequelize.define('PcInfo', {
   underscored: false, // Deshabilitado porque ya estamos usando los nombres exactos
   freezeTableName: true // Evita que Sequelize pluralice el nombre de la tabla
 });
+module.exports = PcInfo;
