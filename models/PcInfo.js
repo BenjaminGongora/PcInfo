@@ -17,10 +17,14 @@ const PcInfo = sequelize.define('PcInfo', {
     allowNull: false,
     unique: true
   },
-  area: {
-    type: DataTypes.STRING(50),
-    allowNull: false
-  },
+  // En tu modelo, define un validador
+area: {
+  type: DataTypes.STRING(50),
+  allowNull: false,
+  validate: {
+    isIn: [['Ventas', 'Marketing', 'IT']] // Valores permitidos
+  }
+},
   systemmodel: {  // Nota: todo en minúsculas para coincidir con la BD
     type: DataTypes.STRING(255),
     allowNull: false,
