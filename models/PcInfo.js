@@ -53,10 +53,10 @@ const PcInfo = sequelize.define('PcInfo', {
     type: DataTypes.DATE,
     allowNull: false
   }
-}, {
+},  {
   tableName: 'pc_infos',
-  timestamps: true, // created_at y updated_at
-  underscored: false, // Deshabilitado porque ya estamos usando los nombres exactos
-  freezeTableName: true // Evita que Sequelize pluralice el nombre de la tabla
+  timestamps: false, // Deshabilitar timestamps
+  underscored: false,
+  freezeTableName: true
 });
 module.exports = PcInfo;
