@@ -22,7 +22,7 @@ area: {
   type: DataTypes.STRING(50),
   allowNull: false,
   validate: {
-    isIn: [['Soporte Tecnico','Sistemas','Ventas','Recursos','Humanos','Finanzas','Gerencia','Contabilidad']] // Valores permitidos
+    isIn: [['Administracion','Soporte Tecnico','Sistemas','Ventas','Recursos Humanos','Finanzas','Gerencia','Contabilidad']] // Valores permitidos
   }
 },
   systemmodel: {  // Nota: todo en minúsculas para coincidir con la BD
