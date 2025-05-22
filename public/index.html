@@ -1,86 +1,129 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Listado de PCs</title>
-  <style>
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
-    th { background: #f0f0f0; }
-    ul { margin: 0; padding-left: 18px; }
-  </style>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Otika - Admin Dashboard Template</title>
+  <!-- General CSS Files -->
+  <link rel="stylesheet" href="assets/css/app.min.css">
+  <link rel="stylesheet" href="assets/bundles/datatables/datatables.min.css">
+  <link rel="stylesheet" href="assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+  <!-- Template CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <!-- Custom style CSS -->
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel='shortcut icon' type='image/x-icon' href='assets/img/favicon.ico' />
 </head>
-<body>
-  <h1>Listado de PCs</h1>
-  <div id="resultado"></div>
 
+<body>
+  <div class="loader"></div>
+  <div id="app">
+    <div class="main-wrapper main-wrapper-1">
+      <div class="navbar-bg"></div>
+      <!-- Main Content -->
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Listado de PCs</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="table-1">
+                    <thead>
+                      <tr>
+                        <th class="text-center">#</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>DNI</th>
+                        <th>Área</th>
+                        <th>Modelo</th>
+                        <th>SO</th>
+                        <th>CPU</th>
+                        <th>RAM (GB)</th>
+                        <th>GPUs</th>
+                        <th>Almacenamiento</th>
+                        <th>Fecha</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Aquí se llenarán los datos dinámicamente -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- General JS Scripts -->
+  <script src="assets/js/app.min.js"></script>
+  <!-- JS Libraies -->
+  <script src="assets/bundles/datatables/datatables.min.js"></script>
+  <script src="assets/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
+  <script src="assets/bundles/jquery-ui/jquery-ui.min.js"></script>
+  <!-- Page Specific JS File -->
+  <script src="assets/js/page/datatables.js"></script>
+  <!-- Template JS File -->
+  <script src="assets/js/scripts.js"></script>
+  <!-- Custom JS File -->
+  <script src="assets/js/custom.js"></script>
+
+  <!-- Script para llenar la tabla con datos de la API -->
   <script>
-    async function listarDatos() {
-      try {
-        const res = await fetch('https://pcinfo.onrender.com/soportetecnico/api/listar-datos');
-        const data = await res.json();
-        const contenedor = document.getElementById('resultado');
-        if (data.success && data.data.length > 0) {
-          contenedor.innerHTML = `
-            <table>
-              <thead>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('https://pcinfo.onrender.com/soportetecnico/api/listar-datos')
+        .then(res => res.json())
+        .then(json => {
+          if (json.success && json.data.length > 0) {
+            let rows = '';
+            json.data.forEach((pc, idx) => {
+              rows += `
                 <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>DNI</th>
-                  <th>Área</th>
-                  <th>Modelo</th>
-                  <th>SO</th>
-                  <th>CPU</th>
-                  <th>RAM (GB)</th>
-                  <th>GPUs</th>
-                  <th>Almacenamiento</th>
-                  <th>Fecha</th>
+                  <td class="text-center">${idx + 1}</td>
+                  <td>${pc.nombre || ''}</td>
+                  <td>${pc.apellido || ''}</td>
+                  <td>${pc.dni || ''}</td>
+                  <td>${pc.area || ''}</td>
+                  <td>${pc.systemmodel || ''}</td>
+                  <td>${pc.operatingsystem || ''}</td>
+                  <td>${pc.cpu || ''}</td>
+                  <td>${pc.totalramgb || ''}</td>
+
+                  
+                    <td>
+                    <ul style="padding-left:18px;margin:0;">
+                      ${(pc.gpus && pc.gpus.length > 0) ? pc.gpus.map(gpu => `<li>${gpu}</li>`).join('') : '<li>-</li>'}
+                    </ul>
+                  </td>
+                  <td>
+                    <ul style="padding-left:18px;margin:0;">
+                      ${(pc.storagedevices && pc.storagedevices.length > 0) 
+                        ? pc.storagedevices.map(dev => `<li>${dev.Type || ''} - ${dev.Model || ''} - ${dev.SizeGB || ''} GB</li>`).join('')
+                        : '<li>-</li>'}
+                    </ul>
+                  </td>
+                  <td>${pc.timestamp ? new Date(pc.timestamp).toLocaleString('es-PE') : ''}</td>
                 </tr>
-              </thead>
-              <tbody>
-                ${data.data.map(pc => `
-                  <tr>
-                    <td>${pc.id}</td>
-                    <td>${pc.nombre}</td>
-                    <td>${pc.apellido}</td>
-                    <td>${pc.dni}</td>
-                    <td>${pc.area}</td>
-                    <td>${pc.systemmodel}</td>
-                    <td>${pc.operatingsystem}</td>
-                    <td>${pc.cpu}</td>
-                    <td>${pc.totalramgb}</td>
-                    <td>
-                      <ul>
-                        ${(pc.gpus && pc.gpus.length > 0)
-                          ? pc.gpus.map(gpu => `<li>${gpu}</li>`).join('')
-                          : '<li>-</li>'}
-                      </ul>
-                    </td>
-                    <td>
-                      <ul>
-                        ${(pc.storagedevices && pc.storagedevices.length > 0)
-                          ? pc.storagedevices.map(dev => 
-                              `<li>${dev.Type || ''} - ${dev.Model || ''} - ${dev.SizeGB || ''} GB</li>`
-                            ).join('')
-                          : '<li>-</li>'}
-                      </ul>
-                    </td>
-                    <td>${new Date(pc.timestamp).toLocaleString('es-PE')}</td>
-                  </tr>
-                `).join('')}
-              </tbody>
-            </table>
-          `;
-        } else {
-          contenedor.textContent = 'No hay datos disponibles.';
-        }
-      } catch (err) {
-        document.getElementById('resultado').textContent = 'Error al obtener los datos.';
-      }
-    }
-    listarDatos();
+              `;
+            });
+            document.querySelector('#table-1 tbody').innerHTML = rows;
+            // Inicializa DataTable si no está inicializado
+            if (!$.fn.DataTable.isDataTable('#table-1')) {
+              $('#table-1').DataTable();
+            }
+          } else {
+            document.querySelector('#table-1 tbody').innerHTML = '<tr><td colspan="12">No hay datos disponibles.</td></tr>';
+          }
+        })
+        .catch(() => {
+          document.querySelector('#table-1 tbody').innerHTML = '<tr><td colspan="12">Error al obtener los datos.</td></tr>';
+        });
+    });
   </script>
 </body>
 </html>
