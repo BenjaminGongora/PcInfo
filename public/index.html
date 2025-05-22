@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Listado de PCs</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+    th { background: #f0f0f0; }
+    ul { margin: 0; padding-left: 18px; }
+  </style>
+</head>
+<body>
+  <h1>Listado de PCs</h1>
+  <div id="resultado"></div>
+
+  <script>
+    async function listarDatos() {
+      try {
+        const res = await fetch('https://pcinfo.onrender.com/soportetecnico/api/listar-datos');
+        const data = await res.json();
+        const contenedor = document.getElementById('resultado');
+        if (data.success && data.data.length > 0) {
+          contenedor.innerHTML = `
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>DNI</th>
+                  <th>Área</th>
+                  <th>Modelo</th>
+                  <th>SO</th>
+                  <th>CPU</th>
+                  <th>RAM (GB)</th>
+                  <th>GPUs</th>
+                  <th>Almacenamiento</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${data.data.map(pc => `
+                  <tr>
+                    <td>${pc.id}</td>
+                    <td>${pc.nombre}</td>
+                    <td>${pc.apellido}</td>
+                    <td>${pc.dni}</td>
+                    <td>${pc.area}</td>
+                    <td>${pc.systemmodel}</td>
+                    <td>${pc.operatingsystem}</td>
+                    <td>${pc.cpu}</td>
+                    <td>${pc.totalramgb}</td>
+                    <td>
+                      <ul>
+                        ${(pc.gpus && pc.gpus.length > 0)
+                          ? pc.gpus.map(gpu => `<li>${gpu}</li>`).join('')
+                          : '<li>-</li>'}
+                      </ul>
+                    </td>
+                    <td>
+                      <ul>
+                        ${(pc.storagedevices && pc.storagedevices.length > 0)
+                          ? pc.storagedevices.map(dev => 
+                              `<li>${dev.Type || ''} - ${dev.Model || ''} - ${dev.SizeGB || ''} GB</li>`
+                            ).join('')
+                          : '<li>-</li>'}
+                      </ul>
+                    </td>
+                    <td>${new Date(pc.timestamp).toLocaleString('es-PE')}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          `;
+        } else {
+          contenedor.textContent = 'No hay datos disponibles.';
+        }
+      } catch (err) {
+        document.getElementById('resultado').textContent = 'Error al obtener los datos.';
+      }
+    }
+    listarDatos();
+  </script>
+</body>
+</html>
