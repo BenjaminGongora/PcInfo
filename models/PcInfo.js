@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const PcInfo = require('../models/PcInfo');
 
 const PcInfo = sequelize.define('PcInfo', {
   nombre: {
