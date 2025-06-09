@@ -25,10 +25,23 @@ area: {
     isIn: [['Administracion','Soporte Tecnico','Sistemas','Ventas','Recursos Humanos','Finanzas','Gerencia','Contabilidad']] // Valores permitidos
   }
 },
+
+  sucursal: {
+    type: DataTypes.STRING(100),
+    allowNull: false,
+    validate: {
+      isIn: [['Cañete', 'Pisco', 'Ica', 'Chincha', 'Chincha Mazaro', 'Taller Huarochirí', 'San Eugenio', 'Terminal Iquitos', 'Taller Colonial', 'Taller Ica']] // Valores permitidos
+    }
+  },
   systemmodel: {  // Nota: todo en minúsculas para coincidir con la BD
     type: DataTypes.STRING(255),
     allowNull: false,
     field: 'systemmodel'  // Explícitamente define el nombre de columna
+  },
+    systemserial: {  // Nota: todo en minúsculas para coincidir con la BD
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    field: 'systemserial'  // Explícitamente define el nombre de columna
   },
   operatingsystem: {
     type: DataTypes.STRING(255),

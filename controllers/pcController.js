@@ -10,7 +10,9 @@ exports.recibirDatosPC = async (req, res) => {
       apellido: UserInfo.Apellido,
       dni: UserInfo.DNI,
       area: UserInfo.Area,
+      sucursal: UserInfo.sucursal,
       systemmodel: SystemInfo.SystemModel, // Ahora en minúsculas
+      systemserial: SystemInfo.SystemSerial, // Ahora en minúsculas
       operatingsystem: SystemInfo.OperatingSystem,
       cpu: SystemInfo.CPU,
       totalramgb: SystemInfo.TotalRAMGB,
