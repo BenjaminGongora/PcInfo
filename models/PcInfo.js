@@ -67,9 +67,15 @@ area: {
     field: 'storagedevices'
   },
   timestamp: {
-    type: DataTypes.DATE,
-    allowNull: false
+  type: DataTypes.DATE,
+  allowNull: false,
+  defaultValue: DataTypes.NOW, // Usa la fecha actual si no se proporciona
+  get() {
+    // Formatear la fecha cuando se obtiene el valor
+    const rawValue = this.getDataValue('timestamp');
+    return rawValue ? new Date(rawValue).toISOString() : null;
   }
+}
 },  {
   tableName: 'pc_infos',
   timestamps: false, // Deshabilitar timestamps
